@@ -14,17 +14,19 @@ pipeline {
         copyArtifacts(projectName: 'NodeJs-Automation/main', selector: lastSuccessful())
       
         script {
-          def tfData = readJSON file: 'tf_outputs.json'
-          def ciData = readJSON file: 'image_info.json'
+  def tfData = readJSON file: 'tf_outputs.json'
+  def ciData = readJSON file: 'image_info.json'
 
-          env.GKE_CLUSTER = tfData.gke_cluster_name.value
-          env.GCP_REGION = tfData.gcp_region.value
-          env.PROJECT_ID = tfData.project_id.value
-          env.IMAGE_NAME = ciData.image
+  // Safely access existing keys
+  env.GKE_CLUSTER = tfData.cluster_name.value
+  env.GCP_REGION = 'us-central1'  // Hardcoded since not present in tf_outputs.json
+  env.PROJECT_ID = 'shaktiman-460312'  // Also hardcoded
+  env.IMAGE_NAME = ciData.image
 
-          echo "Using image: ${env.IMAGE_NAME}"
-          echo "Using GKE Cluster: ${env.GKE_CLUSTER} in Region: ${env.GCP_REGION}"
-        }
+  echo "Using image: ${env.IMAGE_NAME}"
+  echo "Using GKE Cluster: ${env.GKE_CLUSTER} in Region: ${env.GCP_REGION}, Project ID: ${env.PROJECT_ID}"
+}
+
       }
     }
 
