@@ -1,0 +1,16 @@
+replicaCount: 2
+
+image:
+  repository: 123456789.dkr.ecr.us-west-2.amazonaws.com/myapp
+  tag: latest
+  pullPolicy: IfNotPresent
+
+containerPort: 8085
+
+service:
+  name: myapp
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
